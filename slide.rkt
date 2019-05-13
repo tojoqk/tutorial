@@ -2,7 +2,8 @@
 (require slideshow/code)
 
 (slide
- (t "Racket入門"))
+ (tt  "Racket入門")
+ (t "Author: TojoQK"))
 
 (slide
  #:title "Racketの紹介"
@@ -54,28 +55,20 @@
  (subitem "イミュータブルなhash(ミュータブルなhashもある)"))
 
 (slide
- (t "Racketの基礎"))
-
-(slide
- #:title "定義エリア(Definitions area)と対話エリア(Interactions area)"
- (item "定義エリア")
- (subitem "手続きなどの定義の並び")
- (subitem "スクリプト")
- (subitem "テスト")
- (item "対話環境(REPL)")
- (subitem "定義した手続きや変数の確認")
- (subitem "スクリプトを書かずにREPLのみで完結する場合もある"))
+ (t "Racketの基本"))
 
 (slide
  #:title "定義エリア"
- (item "DrRacketであれば上のエリアのこと")
+ (item "DrRacketであれば画面の上のエリアのこと")
  (item "手続きや変数の定義を並べる")
- (item "スクリプト")
+ (item "スクリプトの記述")
  (subitem "DrRacketの右上の「Run」ボタンを押すと実行される")
- (item "プログラムのテスト"))
+ (item "プログラムのテストの記述")
+ (tt "本資料は定義エリアの先頭行に以下が記述されていることを前提とする")
+ (codeblock-pict "#lang racket"))
 
 (slide
- #:title "対話環境(REPL)"
+ #:title "対話エリア(REPL)"
  (item "DrRacketであれば下のエリアのこと")
  (item "「Run」ボタンを押すと定義した変数が読み込まれる")
  (item "\">\"の後に式を入力してEnterキーを押すと値が出力される")
@@ -83,7 +76,7 @@
 
 (slide
  #:title "手続き呼び出し"
- (item "リストの先頭に手続きを残りには引数を書く")
+ (item "リストの先頭に手続きを、残りには引数を書く")
  (code (proc arg ...))
  (subitem "\"proc\"が手続き")
  (subitem "\"arg ...\"が引数")
@@ -104,7 +97,8 @@
   (string? 'foo) => #f)
  (code
   (string? "foo") => #t)
- (item "式の値を調べるときはREPLに入力してEnterキーを押す"))
+ (item "式の値を調べるときは対話エリア(REPL)に入力してEnterキーを押す")
+ (tt "\"=>\"が書いてある例は実際に対話エリアで試してみよう!"))
 
 (slide
  #:title "述語について"
@@ -161,11 +155,7 @@
  (item (code eq?) (code eqv?) "と比較すると遅い"))
 
 (slide
- #:title "基本的なデータ型について"
- (item "シンボル")
- (item "ペア")
- (item "数")
- (item "手続き"))
+ (t "基本的なデータ型について"))
 
 (slide
  #:title "シンボル"
@@ -176,6 +166,17 @@
  (code (eq? 'hoge 'hoge) => #t)
  (tt "名前によって他と識別できることに意味がある場合に使用する")
  (item "シンボル同士のみを比較する" (code symbol=?) "もある"))
+
+(slide
+ #:title "ペア"
+ (item "述語は" (code pair?))
+ (item "二つの値を持つ箱のようなもの")
+ (subitem "シンボル" (code 'x) "と" (code 'y) "のペアを作成する")
+ (code (cons 'x 'y) => '(x . y))
+ (subitem "car部(左側のこと)を取り出す")
+ (code (car (cons 'x 'y)) => 'x)
+ (subitem "cdr部(右側のこと)を取り出す")
+ (code (cdr (cons 'x 'y)) => 'y))
 
 (slide
  #:title "数"
@@ -189,3 +190,28 @@
  (item "正確(exact)か非正確(inexact)か")
  (code (exact? 1) => #t)
  (code (exact? 1.0) => #f))
+
+(slide
+ #:title "手続き"
+ (item "述語は" (code procedure?))
+ (item "正しい数の引数を渡すと処理を実行して値を返す")
+ (code (cons 'a 'b) => '(a . b))
+ (t "二つの引数を与えて一つの値を返す")
+ (item "値を返すことではなく、処理が目的の手続きもある")
+ (code (write 'hello) => (void))
+ (t "\"hello\"と出力する")
+ (subitem "値を受けとって値を返すこと以外の処理を副作用と呼ぶ")
+ (subitem (code write) "は副作用を目的とした手続き"))
+
+(slide
+ #:title "手続きの作成"
+ (item "手続きを作る構文 lambda (の単純な構文のみ紹介)")
+ (code (lambda (arg ...) expr))
+ (subitem (code arg ...) "は手続きの引数を束縛する変数")
+ (subitem (code expr) "は本体の式")
+ (tt "手続きが呼び出されると、")
+ (tt "引数として与えられた値は対応する変数に束縛され、")
+ (tt "この変数を含む本体の式が評価されて値を返却する")
+ (item "例")
+ (subitem (code ((lambda (x) (* x x)) 5) => 25))
+ (subitem (code ((lambda (x y) (cons y x)) 'x 'y) => '(y . x))))
